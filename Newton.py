@@ -1,7 +1,6 @@
 import numpy as np
 import sympy as sp
 
-
 funciones = [] #Guardar las funciones
 variables = [] #Guardar las variables de las funciones
 punto = []
