@@ -1,8 +1,10 @@
-import sympy as sp
 import numpy as np
+import sympy as sp
+
 
 funciones = [] #Guardar las funciones
 variables = [] #Guardar las variables de las funciones
+punto = []
 n = int(input("Cuantas variables tiene tu sistema: "))
 
 for i in range(n):
@@ -16,14 +18,8 @@ for i in range(n):                                           #
                 variables.pop(-1)                            #
 variables.sort() #Ordenar las variables en orden alfabético
 
+for i in range(n):
+    punto[i].append(float(input("Ingresa el valor de {} en x0: ".format(variables[i]))))
+
 for i in variables:       #Hacer las
     i = sp.symbols(i)     #variables símbolos
-
-func = [] #Guardar las funciones como símbolos
-
-for i in range(n):
-    func[i].append(sp.sympify(funciones[i])) #funciones como símbolos
-
-
-
-print(variables)
