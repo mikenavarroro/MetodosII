@@ -19,7 +19,7 @@ for i in range(n):                                           #
 variables.sort() #Ordenar las variables en orden alfabético
 
 for i in range(n):
-    punto[i].append(float(input("Ingresa el valor de {} en x0: ".format(variables[i])))) #Ingresa
+    punto.append(float(input("Ingresa el valor de {} en x0: ".format(variables[i])))) #Ingresa
                                                                                 #los valores del
                                                                                 #punto inicial
 
