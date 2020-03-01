@@ -3,7 +3,8 @@ import sympy as sp
 
 funciones = [] #Guardar las funciones
 variables = [] #Guardar las variables de las funciones
-punto = []
+punto = [] #Guardar el punto inicial y posteriormente la solucion
+
 n = int(input("Cuantas variables tiene tu sistema: "))
 
 for i in range(n):
@@ -18,7 +19,9 @@ for i in range(n):                                           #
 variables.sort() #Ordenar las variables en orden alfabético
 
 for i in range(n):
-    punto[i].append(float(input("Ingresa el valor de {} en x0: ".format(variables[i]))))
+    punto[i].append(float(input("Ingresa el valor de {} en x0: ".format(variables[i])))) #Ingresa
+                                                                                #los valores del
+                                                                                #punto inicial
 
 for i in variables:       #Hacer las
     i = sp.symbols(i)     #variables símbolos
