@@ -1,15 +1,15 @@
 import numpy as np
 import sympy as sp
+import matrices as mt
 
 funciones = [] #Guardar las funciones
 variables = [] #Guardar las variables de las funciones
 
 #Hacer símbolos el abecedario para poder derivar
-a, b, c, d, e, f, g, h, i, j, k = sp.symbols('a b c d e f g h i j k')
-l, m, n, o, p, q, r, s, t, u, v = sp.symbols('l m n o p q r s t u v')
-w, x, y, z = sp.symbols('w x y z')
+a, b, d, f, g, j, k = sp.symbols('a b d f g j k')
+l, m, q, r, u, v, w, x, y, z = sp.symbols('l m q r u v w x y z')
 
-abecedario = [a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z]
+abecedario = [a, b, d, f, g, j, k, l, m, q, r, u, v, w, x, y, z]
 
 #Pedir el número de variables del sistema
 n_var = int(input("Cuantas variables tiene tu sistema: "))
@@ -17,7 +17,7 @@ n_var = int(input("Cuantas variables tiene tu sistema: "))
 punto = [] #Guardar el punto inicial y posteriormente la solución
 
 for i_var in range(n_var):
-    funciones.append(input("función {}: ".format(i_var+1)) #Agregar n funciones a la lista)
+    funciones.append(input("función {}: ".format(i_var+1))) #Agregar n funciones a la lista
 
 for i_var in range(n_var):
     for j_var in funciones[i_var]:                                   #
@@ -31,7 +31,7 @@ variables.sort() #Ordenar las variables en orden alfabético
 
 #Ingresar el punto inicial
 for i_var in range(n_var):
-    punto[i_var] = float(input("Ingresa el valor de {} en x0: ".format(variables[i_var])))
+    punto.append(float(input("Ingresa el valor de {} en x0: ".format(variables[i_var]))))
 
 #Pedir la tolerancia
 tol = float(input("Tolerancia: "))
@@ -78,31 +78,32 @@ while no_iteraciones < iter or error > tol:
     F = [] #Crear la matriz de F(Xk)
 
     #Evaluar las funciones en el punto
-    l_var = 0
+    #l_var = 0
     for i_var in range(n_var):
         for j_var in range(n_var):
-            F.append(sp.sympify(funciones[l_var]).subs(var_abc[j_var], punto[j_var]))
-            l_var += 1
-    
-    F = np.asarray(F)
-    F = np.linalg.transpose(F)
+            F.append(sp.sympify(funciones[j_var]).subs(var_abc[j_var], punto[j_var]))
+            #l_var += 1
 
-    Y = JacobiInv @ F #Multiplicación de la inversa del jacobiano con el vector F(Xk)
+    F = np.asarray(F)
+    #F = np.transpose(F)
+
+    Y = mt.MatxVec(JacobiInv, F, n_var) #Multiplicación de la inversa del jacobiano con el vector F(Xk)
 
     puntos_anteriores.append(punto) #Guardar el punto en otra lista para el cálculo del error
 
-    punto = punto - Y #Calcular X(k+1)
+    punto = mt.restaVec(punto, Y, n_var) #Calcular X(k+1)
 
     #Calcular el error
+    '''
     p_var = 0
     for i_var in puntos_anteriores:
         error = max(abs(punto[p_var] - i_var))
-
+    '''
     no_iteraciones += 1
 
 
 punto = np.asarray(punto)
-punto = np.linalg.transpose(punto)
+punto = np.transpose(punto)
 
 #Imprimir el resultado
 if no_iteraciones > iter:
