@@ -1,6 +1,6 @@
 import numpy as np
 import sympy as sp
-import matrices as mt
+import simpli as sim
 
 funciones = [] #Guardar las funciones
 variables = [] #Guardar las variables de las funciones
@@ -87,11 +87,11 @@ while no_iteraciones < iter or error > tol:
     F = np.asarray(F)
     #F = np.transpose(F)
 
-    Y = mt.MatxVec(JacobiInv, F, n_var) #Multiplicación de la inversa del jacobiano con el vector F(Xk)
+    Y = sim.MatxVec(JacobiInv, F, n_var) #Multiplicación de la inversa del jacobiano con el vector F(Xk)
 
     puntos_anteriores.append(punto) #Guardar el punto en otra lista para el cálculo del error
 
-    punto = mt.restaVec(punto, Y, n_var) #Calcular X(k+1)
+    punto = sim.restaVec(punto, Y, n_var) #Calcular X(k+1)
 
     #Calcular el error
     '''
