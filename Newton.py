@@ -75,34 +75,29 @@ while no_iteraciones <= iter:# or error > tol:
             m_var += 1
 
     JacobiInv = np.linalg.inv(Jacobi) #Inversa de la matriz
-    F = np.empty((n_var, 1)) #Crear la matriz de F(Xk)
+    F = [] #Crear la matriz de F(Xk)
 
     #Evaluar las funciones en el punto
     for i_var in range(n_var):
         for j_var in range(n_var):
             if var_abc[j_var] in funciones[i_var]:
-                F[i_var, 0]=sp.sympify(funciones[i_var]).subs(var_abc[j_var], punto[j_var])
+                F.append(sp.sympify(funciones[i_var]).subs(var_abc[j_var], punto[j_var]))
 
-    #F = np.asarray(F)
-    #F = np.transpose(F)
-    print(F)
-    print(no_iteraciones)
-    #Y = sim.MatxVec(JacobiInv, F, n_var) #Multiplicación de la inversa del jacobiano con el vector F(Xk)
+    Y = JacobiInv @ F
 
-    #puntos_anteriores.append(punto) #Guardar el punto en otra lista para el cálculo del error
-
-    #punto = sim.restaVec(punto, Y, n_var) #Calcular X(k+1)
+    puntos_anteriores.append(punto) #Guardar el punto en otra lista para el cálculo del error
+    punto = punto - Y #Calcular X(k+1)
 
     #Calcular el error
-    '''
-    p_var = 0
-    for i_var in puntos_anteriores:
-        error = max(abs(punto[p_var] - i_var))
-    '''
+    #if no_iteraciones != 1:
+    #    p_var = 0
+    #    q_var = 0
+    #    while p_var <= len(punto):
+    #        error = max(abs(punto[p_var] - puntos_anteriores[p_var, q_var]))
+    #        p_var += 1
+
+    print(no_iteraciones)
     no_iteraciones += 1
-'''
-punto = np.asarray(punto)
-punto = np.transpose(punto)
 
 #Imprimir el resultado
 if no_iteraciones > iter:
@@ -111,4 +106,3 @@ if no_iteraciones > iter:
 elif error < tol:
     print("Se ha alcanzado el límite de tolerancia establecida.")
     print("La solución es ", punto)
-'''
