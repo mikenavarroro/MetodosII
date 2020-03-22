@@ -1,15 +1,14 @@
 import numpy as np
 import sympy as sp
-import simpli as sim
 
 funciones = [] #Guardar las funciones
 variables = [] #Guardar las variables de las funciones
 
 #Hacer símbolos el abecedario para poder derivar
-a, b, d, f, g, j, k = sp.symbols('a b d f g j k')
-l, m, q, r, u, v, w, x, y, z = sp.symbols('l m q r u v w x y z')
+a, b, d, f, j, k = sp.symbols('a b d f j k')
+m, q, r, u, v, w, x, y, z = sp.symbols('m q r u v w x y z')
 
-abecedario = [a, b, d, f, g, j, k, l, m, q, r, u, v, w, x, y, z]
+abecedario = [a, b, d, f, j, k, m, q, r, u, v, w, x, y, z]
 
 #Pedir el número de variables del sistema
 n_var = int(input("Cuantas variables tiene tu sistema: "))
@@ -32,6 +31,8 @@ variables.sort() #Ordenar las variables en orden alfabético
 #Ingresar el punto inicial
 for i_var in range(n_var):
     punto.append(float(input("Ingresa el valor de {} en x0: ".format(variables[i_var]))))
+
+punto = np.asarray(punto)
 
 #Pedir la tolerancia
 tol = float(input("Tolerancia: "))
@@ -65,7 +66,7 @@ for i_var in range(n_var):
 var_abc.sort() #Ordenar alfabéticamente las variables que se van a usar
 
 #Inicio del método de Newton
-while no_iteraciones < iter or error > tol:
+while no_iteraciones <= iter:# or error > tol:
     #Evaluar la matriz jacobiana en el punto
     m_var = 0
     for i_var in range(n_var):
@@ -74,24 +75,29 @@ while no_iteraciones < iter or error > tol:
             m_var += 1
 
     JacobiInv = np.linalg.inv(Jacobi) #Inversa de la matriz
-
     F = [] #Crear la matriz de F(Xk)
 
     #Evaluar las funciones en el punto
-    #l_var = 0
     for i_var in range(n_var):
         for j_var in range(n_var):
-            F.append(sp.sympify(funciones[j_var]).subs(var_abc[j_var], punto[j_var]))
-            #l_var += 1
+            F.append(sp.sympify(funciones[i_var]).subs(var_abc[j_var], punto[j_var]))
 
-    F = np.asarray(F)
+    for i_var in range(n_var):
+        for j_var in range(n_var):
+            if F[i_var, j_var].isnumeric():
+                pass
+            else:
+                del(F[i_var])
+
+    #F = np.asarray(F)
     #F = np.transpose(F)
+    print(F)
+    print(no_iteraciones)
+    #Y = sim.MatxVec(JacobiInv, F, n_var) #Multiplicación de la inversa del jacobiano con el vector F(Xk)
 
-    Y = sim.MatxVec(JacobiInv, F, n_var) #Multiplicación de la inversa del jacobiano con el vector F(Xk)
+    #puntos_anteriores.append(punto) #Guardar el punto en otra lista para el cálculo del error
 
-    puntos_anteriores.append(punto) #Guardar el punto en otra lista para el cálculo del error
-
-    punto = sim.restaVec(punto, Y, n_var) #Calcular X(k+1)
+    #punto = sim.restaVec(punto, Y, n_var) #Calcular X(k+1)
 
     #Calcular el error
     '''
@@ -100,8 +106,7 @@ while no_iteraciones < iter or error > tol:
         error = max(abs(punto[p_var] - i_var))
     '''
     no_iteraciones += 1
-
-
+'''
 punto = np.asarray(punto)
 punto = np.transpose(punto)
 
@@ -112,3 +117,4 @@ if no_iteraciones > iter:
 elif error < tol:
     print("Se ha alcanzado el límite de tolerancia establecida.")
     print("La solución es ", punto)
+'''
