@@ -75,19 +75,13 @@ while no_iteraciones <= iter:# or error > tol:
             m_var += 1
 
     JacobiInv = np.linalg.inv(Jacobi) #Inversa de la matriz
-    F = [] #Crear la matriz de F(Xk)
+    F = np.empty((n_var, 1)) #Crear la matriz de F(Xk)
 
     #Evaluar las funciones en el punto
     for i_var in range(n_var):
         for j_var in range(n_var):
-            F.append(sp.sympify(funciones[i_var]).subs(var_abc[j_var], punto[j_var]))
-
-    for i_var in range(n_var):
-        for j_var in range(n_var):
-            if F[i_var, j_var].isnumeric():
-                pass
-            else:
-                del(F[i_var])
+            if var_abc[j_var] in funciones[i_var]:
+                F[i_var, 0]=sp.sympify(funciones[i_var]).subs(var_abc[j_var], punto[j_var])
 
     #F = np.asarray(F)
     #F = np.transpose(F)
